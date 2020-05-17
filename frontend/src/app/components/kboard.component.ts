@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms'
 
 @Component({
   selector: 'app-kboard',
@@ -7,9 +8,44 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KboardComponent implements OnInit {
 
-  constructor() { }
+	boardGroup: FormGroup
+	cardsArray: FormArray
 
-  ngOnInit(): void {
-  }
+	constructor(private fb: FormBuilder) { }
+	
+	// lifecycle method
+	// https://angular.io/guide/lifecycle-hooks
+	ngOnInit(): void {
+		this.initializeForm()
+	}
 
+	initializeForm() {
+		this.boardGroup = this.createBoard()
+		this.cardsArray = this.boardGroup.get('cards') as FormArray
+	}
+
+	// helper methods
+	private createBoard(): FormGroup {
+		return (
+			this.fb.group({
+				title: this.fb.control(''),
+				createdBy: this.fb.control(''),
+				comments: this.fb.control(''),
+				cards: this.createCards()
+			})
+		)
+	}
+	private createCards(): FormArray {
+		return (
+			this.fb.array([])
+		)
+	}
+	private createCard(): FormGroup {
+		return (
+			this.fb.group({
+				description: this.fb.control(''),
+				priority: this.fb.control('')
+			})
+		)
+	}
 }
