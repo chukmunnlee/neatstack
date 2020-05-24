@@ -19,6 +19,18 @@ export class KboardComponent implements OnInit {
 		this.initializeForm()
 	}
 
+	addCard() {
+		this.cardsArray.push(this.createCard())
+	}
+	removeCard(idx: number) {
+		this.cardsArray.removeAt(idx)
+	}
+	processForm() {
+		const board = this.boardGroup.value;
+		console.log('board = ', board)
+		this.initializeForm()
+	}
+
 	initializeForm() {
 		this.boardGroup = this.createBoard()
 		this.cardsArray = this.boardGroup.get('cards') as FormArray

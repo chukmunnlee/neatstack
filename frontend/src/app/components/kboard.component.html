@@ -5,30 +5,38 @@
 </div>
 <div class="row">
 	<div class="col">
-		<form>
+		<form [formGroup]="boardGroup" (ngSubmit)="processForm()">
 			<div class="form-group">
 				<label for="title">Title</label>
-				<input id="title" class="form-control" type="text" placeholder="Board's title">
+				<input id="title" class="form-control" type="text" 
+						placeholder="Board's title" formControlName="title">
 			</div>
 			<div class="form-group">
 				<label for="createdBy">Created By</label>
-				<input id="createdBy" class="form-control" type="email" placeholder="Owner's email">
+				<input id="createdBy" class="form-control" type="email" 
+						placeholder="Owner's email" formControlName="createdBy">
 			</div>
 			<div class="form-group">
 				<label for="comments">Comments</label>
-				<textarea id="comments" class="form-control" rows="5" placeholder="Comments"></textarea>
+				<textarea id="comments" class="form-control" rows="5" 
+							placeholder="Comments" formControlName="comments"></textarea>
 			</div>
 			<div class="d-flex justify-content-between">
 				<button class="btn btn-primary" type="submit">
 					Create
 					<i class="far fa-calendar-plus ml-1"></i>
 				</button>
-				<button class="btn btn-warning" type="button">
+				<button class="btn btn-warning" type="button" (click)="addCard()">
 					Add Card
 					<i class="fas fa-list-ol ml-1"></i>
 				</button>
 			</div>
-			<table class="table mt-4">
+			<div class="mt-4 d-flex justify-content-between align-items-center" 
+					*ngIf="cardsArray.controls.length <= 0">
+				<h3>Add some cards to your board</h3>
+				<i class="far fa-hand-point-up fa-2x"></i>
+			</div>
+			<table class="table mt-4" *ngIf="cardsArray.controls.length > 0">
 				<thead>
 					<tr>
 						<th>Description</th>
@@ -36,20 +44,21 @@
 						<th></th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
+				<tbody formArrayName="cards">
+					<tr *ngFor="let c of cardsArray.controls; let idx = index" [formGroup]="c">
 						<td>
-							<input class="form-control" type="text" placeholder="Card's description">
+							<input class="form-control" type="text" 
+									placeholder="Card's description" formControlName="description">
 						</td>
 						<td>
-							<select class="form-control">
+							<select class="form-control" formControlName="priority">
 								<option value="0">Low</option>
 								<option value="1">Medium</option>
 								<option value="2">High</option>
 							</select>
 						</td>
 						<td>
-							<button class="btn btn-danger" type="button">
+							<button class="btn btn-danger" type="button" (click)="removeCard(idx)">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</td>
