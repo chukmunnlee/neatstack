@@ -3,10 +3,6 @@
 		<h1>KBoard</h1>
 	</div>
 </div>
-<div>
-	valid: {{ boardGroup.valid }},
-	invalid: {{ boardGroup.invalid }},
-</div>
 <div class="row">
 	<div class="col">
 		<form [formGroup]="boardGroup" (ngSubmit)="processForm()">
