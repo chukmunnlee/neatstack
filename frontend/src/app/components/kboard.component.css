@@ -1,0 +1,15 @@
+.form-group > label {
+	font-size: 1.3em;
+	font-weight: bold;
+}
+
+.form-group.required > label:after,
+.table th.required:after {
+	content: "*";
+	color: red;
+	margin-left: 1px;
+}
+
+button:disabled {
+	cursor: not-allowed;
+}

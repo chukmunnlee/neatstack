@@ -3,18 +3,26 @@
 		<h1>KBoard</h1>
 	</div>
 </div>
+<div>
+	valid: {{ boardGroup.valid }},
+	invalid: {{ boardGroup.invalid }},
+</div>
 <div class="row">
 	<div class="col">
 		<form [formGroup]="boardGroup" (ngSubmit)="processForm()">
-			<div class="form-group">
+			<div class="form-group required">
 				<label for="title">Title</label>
 				<input id="title" class="form-control" type="text" 
+						[ngClass]="{'is-invalid': !isControlValid('title')}"
 						placeholder="Board's title" formControlName="title">
+				<div class="invalid-feedback">Title must be longer than 3 characters</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group required">
 				<label for="createdBy">Created By</label>
 				<input id="createdBy" class="form-control" type="email" 
+						[ngClass]="{'is-invalid': !isControlValid('createdBy')}"
 						placeholder="Owner's email" formControlName="createdBy">
+				<div class="invalid-feedback">Please enter a valid email</div>
 			</div>
 			<div class="form-group">
 				<label for="comments">Comments</label>
@@ -22,7 +30,8 @@
 							placeholder="Comments" formControlName="comments"></textarea>
 			</div>
 			<div class="d-flex justify-content-between">
-				<button class="btn btn-primary" type="submit">
+				<button class="btn btn-primary" type="submit" 
+						[disabled]="boardGroup.invalid">
 					Create
 					<i class="far fa-calendar-plus ml-1"></i>
 				</button>
@@ -39,7 +48,7 @@
 			<table class="table mt-4" *ngIf="cardsArray.controls.length > 0">
 				<thead>
 					<tr>
-						<th>Description</th>
+						<th class="required">Description</th>
 						<th>Priority</th>
 						<th></th>
 					</tr>
@@ -48,6 +57,7 @@
 					<tr *ngFor="let c of cardsArray.controls; let idx = index" [formGroup]="c">
 						<td>
 							<input class="form-control" type="text" 
+									[ngClass]="{'is-invalid': !isControlValid('description', idx)}"
 									placeholder="Card's description" formControlName="description">
 						</td>
 						<td>

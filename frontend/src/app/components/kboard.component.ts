@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms'
+import { FormBuilder, FormGroup, FormArray, FormControl, 
+	Validators, AbstractControl, ValidationErrors } from '@angular/forms'
+
+const nonWithSpace = (ctrl: AbstractControl) => {
+	if (ctrl.value.trim().length > 0)
+		return (null)
+	return { nonWithSpace: true } as ValidationErrors
+}
 
 @Component({
   selector: 'app-kboard',
@@ -31,6 +38,17 @@ export class KboardComponent implements OnInit {
 		this.initializeForm()
 	}
 
+	isControlValid(ctrlName: string, idx = -1): boolean {
+		let ctrl: FormControl
+		if (idx == -1) 
+			ctrl = this.boardGroup.get(ctrlName) as FormControl
+		else {
+			const grp = this.cardsArray.controls[idx]
+			ctrl = grp.get(ctrlName) as FormControl
+		}
+		return (ctrl.pristine || ctrl.valid)
+	}
+
 	initializeForm() {
 		this.boardGroup = this.createBoard()
 		this.cardsArray = this.boardGroup.get('cards') as FormArray
@@ -40,8 +58,9 @@ export class KboardComponent implements OnInit {
 	private createBoard(): FormGroup {
 		return (
 			this.fb.group({
-				title: this.fb.control(''),
-				createdBy: this.fb.control(''),
+				title: this.fb.control('', 
+					[ Validators.required, Validators.minLength(3), nonWithSpace ]),
+				createdBy: this.fb.control('', [ Validators.required, Validators.email ]),
 				comments: this.fb.control(''),
 				cards: this.createCards()
 			})
@@ -55,8 +74,8 @@ export class KboardComponent implements OnInit {
 	private createCard(): FormGroup {
 		return (
 			this.fb.group({
-				description: this.fb.control(''),
-				priority: this.fb.control('')
+				description: this.fb.control('', [ Validators.required, nonWithSpace ]),
+				priority: this.fb.control('0')
 			})
 		)
 	}
