@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, 
 	Validators, AbstractControl, ValidationErrors } from '@angular/forms'
+import { animate, transition, trigger, state, style } from '@angular/animations';
 
 const nonWithSpace = (ctrl: AbstractControl) => {
 	if (ctrl.value.trim().length > 0)
@@ -8,17 +9,54 @@ const nonWithSpace = (ctrl: AbstractControl) => {
 	return { nonWithSpace: true } as ValidationErrors
 }
 
+/*
+const square = state('square', 
+	style({
+		border: '2px solid blue',
+		background: 'lightblue',
+		'border-radius': '0px'
+	})
+)
+const circle = state('circle', 
+	style({
+		border: '2px solid red',
+		background: 'pink',
+		'border-radius': '100px'
+	})
+)
+*/
+
+const voidStyle = style({ opacity: 0, transform: 'translateY(-100%)' })
+
 @Component({
-  selector: 'app-kboard',
-  templateUrl: './kboard.component.html',
-  styleUrls: ['./kboard.component.css']
+	selector: 'app-kboard',
+	templateUrl: './kboard.component.html',
+	styleUrls: ['./kboard.component.css'],
+	animations: [
+		trigger('fadeInOut', [
+			transition('void => *', [ voidStyle, animate('300ms') ]),
+			transition('* => void', [ animate('300ms'), voidStyle ])
+		])
+		/*
+		trigger('circle2square', [
+			circle, square,
+			transition('circle => square', [ animate('300ms') ]),
+			transition('square => circle', [ animate('300ms') ]),
+		])
+		*/
+	]
 })
 export class KboardComponent implements OnInit {
 
 	boardGroup: FormGroup
 	cardsArray: FormArray
+	shape = 'square'
 
 	constructor(private fb: FormBuilder) { }
+
+	toggleShape() {
+		this.shape = 'square' == this.shape? 'circle': 'square'
+	}
 	
 	// lifecycle method
 	// https://angular.io/guide/lifecycle-hooks

@@ -3,6 +3,12 @@
 		<h1>KBoard</h1>
 	</div>
 </div>
+
+<!--
+<div class="box" [@circle2square]="shape"></div>
+<button type="button" (click)="toggleShape()">Toggle Shape</button>
+-->
+
 <div class="row">
 	<div class="col">
 		<form [formGroup]="boardGroup" (ngSubmit)="processForm()">
@@ -50,7 +56,8 @@
 					</tr>
 				</thead>
 				<tbody formArrayName="cards">
-					<tr *ngFor="let c of cardsArray.controls; let idx = index" [formGroup]="c">
+					<tr *ngFor="let c of cardsArray.controls; let idx = index" 
+								[formGroup]="c" @fadeInOut>
 						<td>
 							<input class="form-control" type="text" 
 									[ngClass]="{'is-invalid': !isControlValid('description', idx)}"
