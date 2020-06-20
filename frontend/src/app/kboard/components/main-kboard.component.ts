@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Router} from '@angular/router'
+import { Router, ActivatedRoute} from '@angular/router'
+
+import {BaseComponent} from './base.component';
 
 @Component({
   selector: 'app-main-kboard',
   templateUrl: './main-kboard.component.html',
   styleUrls: ['./main-kboard.component.css']
 })
-export class MainKboardComponent implements OnInit {
+export class MainKboardComponent extends BaseComponent implements OnInit {
 
-	constructor(private router: Router) { }
+	constructor(router: Router, activateRoute: ActivatedRoute) { 
+		super(router, activateRoute)
+	}
 	
 	ngOnInit(): void { }
-
-	back() {
-		this.router.navigate([ '/' ])
-	}
 
 }

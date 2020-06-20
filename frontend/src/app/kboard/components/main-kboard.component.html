@@ -1,8 +1,13 @@
 <p>main-kboard works!</p>
 <div class="row">
-	<div class="col d-flex justify-content-end">
+	<div class="col d-flex justify-content-between">
 		<button class="btn btn-secondary" type="button" (click)="back()">
 			Back
+			<i class="fas fa-arrow-left ml-1"></i>
+		</button>
+		<button class="btn btn-primary" type="button" (click)="navigateTo('create')">
+			Create
+			<i class="far fa-calendar-plus ml-1"></i>
 		</button>
 	</div>
 </div>

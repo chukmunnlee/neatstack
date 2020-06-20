@@ -1,30 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, 
 	Validators, AbstractControl, ValidationErrors } from '@angular/forms'
 import { animate, transition, trigger, state, style } from '@angular/animations';
+import {Subject} from 'rxjs';
 
-const nonWithSpace = (ctrl: AbstractControl) => {
+import { Kboard } from '../../../../../common/models'
+
+const nonWhiteSpace = (ctrl: AbstractControl) => {
 	if (ctrl.value.trim().length > 0)
 		return (null)
-	return { nonWithSpace: true } as ValidationErrors
+	return { nonWhiteSpace: true } as ValidationErrors
 }
-
-/*
-const square = state('square', 
-	style({
-		border: '2px solid blue',
-		background: 'lightblue',
-		'border-radius': '0px'
-	})
-)
-const circle = state('circle', 
-	style({
-		border: '2px solid red',
-		background: 'pink',
-		'border-radius': '100px'
-	})
-)
-*/
 
 const voidStyle = style({ opacity: 0, transform: 'translateY(-100%)' })
 
@@ -37,26 +23,22 @@ const voidStyle = style({ opacity: 0, transform: 'translateY(-100%)' })
 			transition('void => *', [ voidStyle, animate('300ms') ]),
 			transition('* => void', [ animate('300ms'), voidStyle ])
 		])
-		/*
-		trigger('circle2square', [
-			circle, square,
-			transition('circle => square', [ animate('300ms') ]),
-			transition('square => circle', [ animate('300ms') ]),
-		])
-		*/
-	]
+	],
+	exportAs: 'kboardCtrl'
 })
 export class KboardComponent implements OnInit {
 
+	@Output()
+	onSubmit = new Subject<Partial<Kboard>>()
+
+	get value(): Partial<Kboard> {
+		return (this.boardGroup.value)
+	}
+
 	boardGroup: FormGroup
 	cardsArray: FormArray
-	shape = 'square'
 
 	constructor(private fb: FormBuilder) { }
-
-	toggleShape() {
-		this.shape = 'square' == this.shape? 'circle': 'square'
-	}
 	
 	// lifecycle method
 	// https://angular.io/guide/lifecycle-hooks
@@ -71,9 +53,7 @@ export class KboardComponent implements OnInit {
 		this.cardsArray.removeAt(idx)
 	}
 	processForm() {
-		const board = this.boardGroup.value;
-		console.log('board = ', board)
-		this.initializeForm()
+		this.onSubmit.next(this.value)
 	}
 
 	isControlValid(ctrlName: string, idx = -1): boolean {
@@ -97,7 +77,7 @@ export class KboardComponent implements OnInit {
 		return (
 			this.fb.group({
 				title: this.fb.control('', 
-					[ Validators.required, Validators.minLength(3), nonWithSpace ]),
+					[ Validators.required, Validators.minLength(3), nonWhiteSpace ]),
 				createdBy: this.fb.control('', [ Validators.required, Validators.email ]),
 				comments: this.fb.control(''),
 				cards: this.createCards()
@@ -112,7 +92,7 @@ export class KboardComponent implements OnInit {
 	private createCard(): FormGroup {
 		return (
 			this.fb.group({
-				description: this.fb.control('', [ Validators.required, nonWithSpace ]),
+				description: this.fb.control('', [ Validators.required, nonWhiteSpace ]),
 				priority: this.fb.control('0')
 			})
 		)

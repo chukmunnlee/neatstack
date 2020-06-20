@@ -5,13 +5,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { KboardComponent } from './components/kboard.component';
 import { MainKboardComponent } from './components/main-kboard.component';
+import { CreateComponent } from './components/create.component';
 
 const ROUTES: Routes = [
-	{ path: '', component: MainKboardComponent }
+	{ path: '', component: MainKboardComponent },
+	{ path: 'create', component: CreateComponent }
 ]
 
 @NgModule({
-	declarations: [ KboardComponent, MainKboardComponent ],
+	declarations: [ KboardComponent, MainKboardComponent, CreateComponent ],
 	imports: [
 		CommonModule,
 		FormsModule, ReactiveFormsModule,
