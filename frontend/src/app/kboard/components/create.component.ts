@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from'@angular/router'
 import {Kboard} from '../../../../../common/models';
 import {KboardComponent} from './kboard.component';
 import {BaseComponent} from './base.component';
+import { KboardService } from '../kboard.service'
 
 @Component({
   selector: 'app-create',
@@ -15,7 +16,8 @@ export class CreateComponent extends BaseComponent implements OnInit {
 	@ViewChild('kboard')
 	kboardCtrl: KboardComponent
 
-	constructor(router: Router, activatedRoute: ActivatedRoute) { 
+	constructor(router: Router, activatedRoute: ActivatedRoute
+				, private kboardSvc: KboardService) { 
 		super(router, activatedRoute)
 	}
 	
@@ -23,8 +25,12 @@ export class CreateComponent extends BaseComponent implements OnInit {
 
 	process(board: Partial<Kboard>) {
 		console.info('CreateComponent: board = ', board)
-		console.info('CreateComponent: @ViewChild = ', this.kboardCtrl.value)
-		this.kboardCtrl.initializeForm()
-		this.back()
+		this.kboardSvc.addBoard(board)
+			.then(boardId => console.info('new boardId: ', boardId))
+			.catch(error => console.error('ERROR addBoard: ', error))
+			.finally(() => {
+				this.kboardCtrl.initializeForm()
+				this.back()
+			})
 	}
 }

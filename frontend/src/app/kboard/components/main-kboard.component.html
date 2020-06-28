@@ -1,4 +1,3 @@
-<p>main-kboard works!</p>
 <div class="row">
 	<div class="col d-flex justify-content-between">
 		<button class="btn btn-secondary" type="button" (click)="back()">
@@ -9,5 +8,25 @@
 			Create
 			<i class="far fa-calendar-plus ml-1"></i>
 		</button>
+	</div>
+</div>
+
+<div class="row mt-4">
+	<div class="col">
+		<h2>My Boards</h2>
+	</div>
+</div>
+
+<div class="row mt-2">
+	<div class="col">
+		<ul class="list-group">
+			<a *ngFor="let b of boards" (click)="navigateTo('update', b.boardId)"
+					class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+				{{ b.title | uppercase }}
+				<span class="badge badge-warning badge-pill">
+					{{ b.cards.length }}
+				</span>
+			</a>
+		</ul>
 	</div>
 </div>

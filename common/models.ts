@@ -1,6 +1,6 @@
 export interface Kboard {
 	boardId: string;
-	createOn: number;
+	createdOn: number;
 	title: string;
 	createdBy: string;
 	comments: string;
