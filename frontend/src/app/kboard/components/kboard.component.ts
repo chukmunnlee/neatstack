@@ -1,10 +1,10 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, 
 	Validators, AbstractControl, ValidationErrors } from '@angular/forms'
 import { animate, transition, trigger, state, style } from '@angular/animations';
 import {Subject} from 'rxjs';
 
-import { Kboard } from '../../../../../common/models'
+import { Kboard, Kcard } from '../../../../../common/models'
 
 const nonWhiteSpace = (ctrl: AbstractControl) => {
 	if (ctrl.value.trim().length > 0)
@@ -31,8 +31,12 @@ export class KboardComponent implements OnInit {
 	@Output()
 	onSubmit = new Subject<Partial<Kboard>>()
 
+	@Input()
 	get value(): Partial<Kboard> {
 		return (this.boardGroup.value)
+	}
+	set value(v: Partial<Kboard>) {
+		this.initializeForm(v)
 	}
 
 	boardGroup: FormGroup
@@ -67,33 +71,35 @@ export class KboardComponent implements OnInit {
 		return (ctrl.pristine || ctrl.valid)
 	}
 
-	initializeForm() {
-		this.boardGroup = this.createBoard()
+	initializeForm(b: Partial<Kboard> = null) {
+		this.boardGroup = this.createBoard(b)
 		this.cardsArray = this.boardGroup.get('cards') as FormArray
 	}
 
 	// helper methods
-	private createBoard(): FormGroup {
+	private createBoard(b: Partial<Kboard> = null): FormGroup {
 		return (
 			this.fb.group({
-				title: this.fb.control('', 
-					[ Validators.required, Validators.minLength(3), nonWhiteSpace ]),
-				createdBy: this.fb.control('', [ Validators.required, Validators.email ]),
-				comments: this.fb.control(''),
-				cards: this.createCards()
+				title: this.fb.control(b? b.title: ''
+						, [ Validators.required, Validators.minLength(3), nonWhiteSpace ]),
+				createdBy: this.fb.control(b? b.createdBy: ''
+						, [ Validators.required, Validators.email ]),
+				comments: this.fb.control(b? b.comments: ''),
+				cards: this.createCards(b? b.cards: [])
 			})
 		)
 	}
-	private createCards(): FormArray {
+	private createCards(c: Kcard[] = []): FormArray {
 		return (
-			this.fb.array([])
+			this.fb.array(c.map(v => this.createCard(v)))
 		)
 	}
-	private createCard(): FormGroup {
+	private createCard(c: Kcard = null): FormGroup {
 		return (
 			this.fb.group({
-				description: this.fb.control('', [ Validators.required, nonWhiteSpace ]),
-				priority: this.fb.control('0')
+				description: this.fb.control(c? c.description: ''
+						, [ Validators.required, nonWhiteSpace ]),
+				priority: this.fb.control(c? c.priority.toString(): '0')
 			})
 		)
 	}

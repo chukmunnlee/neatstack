@@ -4,6 +4,10 @@ export class BaseComponent {
 
 	constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
 
+	getRouteParam(name: string): string {
+		return (this.activatedRoute.snapshot.params[name])
+	}
+
 	home() {
 		this.navigateTo('/')
 	}
