@@ -15,6 +15,3 @@
 	margin-left: 1px;
 }
 
-button:disabled {
-	cursor: not-allowed;
-}

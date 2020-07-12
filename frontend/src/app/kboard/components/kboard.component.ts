@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
+import { Component, OnInit, Output, Input, ElementRef, ContentChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, 
 	Validators, AbstractControl, ValidationErrors } from '@angular/forms'
 import { animate, transition, trigger, state, style } from '@angular/animations';
-import {Subject} from 'rxjs';
+import {Subject, BehaviorSubject, Subscription} from 'rxjs';
 
 import { Kboard, Kcard } from '../../../../../common/models'
 
@@ -26,10 +26,13 @@ const voidStyle = style({ opacity: 0, transform: 'translateY(-100%)' })
 	],
 	exportAs: 'kboardCtrl'
 })
-export class KboardComponent implements OnInit {
+export class KboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	@Output()
 	onSubmit = new Subject<Partial<Kboard>>()
+
+	@Output()
+	onValid = new BehaviorSubject<boolean>(false)
 
 	@Input()
 	get value(): Partial<Kboard> {
@@ -39,8 +42,13 @@ export class KboardComponent implements OnInit {
 		this.initializeForm(v)
 	}
 
+	@ContentChild('submit')
+	submitBtn: ElementRef
+
 	boardGroup: FormGroup
 	cardsArray: FormArray
+
+	private statusChangesSub: Subscription
 
 	constructor(private fb: FormBuilder) { }
 	
@@ -48,6 +56,14 @@ export class KboardComponent implements OnInit {
 	// https://angular.io/guide/lifecycle-hooks
 	ngOnInit(): void {
 		this.initializeForm()
+	}
+
+	ngOnDestroy() {
+		this.statusChangesSub.unsubscribe()
+	}
+
+	ngAfterViewInit() {
+		console.info('#submit = ', this.submitBtn)
 	}
 
 	addCard() {
@@ -72,8 +88,14 @@ export class KboardComponent implements OnInit {
 	}
 
 	initializeForm(b: Partial<Kboard> = null) {
+		if (null != this.statusChangesSub)
+			this.statusChangesSub.unsubscribe()
+
 		this.boardGroup = this.createBoard(b)
 		this.cardsArray = this.boardGroup.get('cards') as FormArray
+
+		this.statusChangesSub = this.boardGroup.statusChanges
+				.subscribe(v => this.onValid.next('VALID' == v))
 	}
 
 	// helper methods

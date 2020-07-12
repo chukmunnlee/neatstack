@@ -4,5 +4,16 @@
 	</div>
 </div>
 
-<app-kboard [value]="board" (onSubmit)="update($event)">
+<app-kboard [value]="board" #kboard="kboardCtrl" (onValid)="formStatus($event)">
+	<div #submit>
+		<button class="btn btn-danger" type="button">
+			Delete
+			<i class="fas fa-trash-alt ml-1"></i>
+		</button>
+		<button class="btn btn-secondary ml-2" type="button"
+					(click)="update(kboard.value)" [disabled]="!enableBtn">
+			Update
+			<i class="fas fa-edit ml-1"></i>
+		</button>
+	</div>
 </app-kboard>

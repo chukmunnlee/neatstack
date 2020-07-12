@@ -16,6 +16,8 @@ export class UpdateComponent extends BaseComponent implements OnInit {
 	boardId: string;
 	board: Kboard
 
+	enableBtn = false;
+
 	constructor(router: Router, activatedRoute: ActivatedRoute
 				, private kboardSvc: KboardService) { 
 	   super(router, activatedRoute)
@@ -30,6 +32,10 @@ export class UpdateComponent extends BaseComponent implements OnInit {
 				console.info('board = ', this.board)
 			})
 			.catch(error => console.info('ERROR findBoardById: ', error))
+	}
+
+	formStatus(s: boolean) {
+		this.enableBtn = s
 	}
 
 	update(p: Partial<Kboard>) {
