@@ -8,6 +8,7 @@ import { KboardComponent } from './components/kboard.component';
 import { MainKboardComponent } from './components/main-kboard.component';
 import { CreateComponent } from './components/create.component';
 import { UpdateComponent } from './components/update.component';
+import { HoldToDeleteDirective } from './directives/hold-to-delete.directive';
 
 const ROUTES: Routes = [
 	{ path: '', component: MainKboardComponent },
@@ -16,7 +17,7 @@ const ROUTES: Routes = [
 ]
 
 @NgModule({
-	declarations: [ KboardComponent, MainKboardComponent, CreateComponent, UpdateComponent ],
+	declarations: [ KboardComponent, MainKboardComponent, CreateComponent, UpdateComponent, HoldToDeleteDirective ],
 	imports: [
 		CommonModule,
 		FormsModule, ReactiveFormsModule,

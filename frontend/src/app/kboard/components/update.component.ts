@@ -17,6 +17,7 @@ export class UpdateComponent extends BaseComponent implements OnInit {
 	board: Kboard
 
 	enableBtn = false;
+	btnStyle = 'none'
 
 	constructor(router: Router, activatedRoute: ActivatedRoute
 				, private kboardSvc: KboardService) { 
@@ -36,6 +37,20 @@ export class UpdateComponent extends BaseComponent implements OnInit {
 
 	formStatus(s: boolean) {
 		this.enableBtn = s
+	}
+
+	progress(p: number) {
+		console.info('progress: ', p)
+		if (p <= 0)
+			this.btnStyle = 'none'
+		else
+			this.btnStyle = `linear-gradient(to left, rgb(220,220,220,0.4) ${100 - p}%, rgb(0,0,0,0) 0%)`
+	}
+
+	delete() {
+		this.kboardSvc.deleteBoard(this.board)
+			.catch(err => console.error('ERROR deleteBoard: ', err))
+			.finally(() => this.navigateTo('../..'))
 	}
 
 	update(p: Partial<Kboard>) {

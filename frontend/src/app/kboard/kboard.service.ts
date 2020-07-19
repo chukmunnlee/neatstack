@@ -20,6 +20,15 @@ export class KboardService extends Dexie {
 		this.boards = this.table('boards')
 	}
 
+	deleteBoard(b: string | Kboard): Promise<void> {
+		let bId: string
+		if (typeof b === 'object')
+			bId = (b as Kboard).boardId
+		else
+			bId = b
+		return (this.boards.delete(bId))
+	}
+
 	updateBoard(board: Kboard): Promise<number> {
 		board.updatedOn = (new Date()).getTime()
 		return (this.boards.update(board.boardId, board))

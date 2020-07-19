@@ -6,7 +6,9 @@
 
 <app-kboard [value]="board" #kboard="kboardCtrl" (onValid)="formStatus($event)">
 	<div #submit>
-		<button class="btn btn-danger" type="button">
+		<button class="btn btn-danger" type="button"
+				[style.background-image]="btnStyle"
+				holdToDelete (h2dProgress)="progress($event)" (h2dExpired)="delete()">
 			Delete
 			<i class="fas fa-trash-alt ml-1"></i>
 		</button>
