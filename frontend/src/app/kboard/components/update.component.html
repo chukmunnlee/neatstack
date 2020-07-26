@@ -4,7 +4,8 @@
 	</div>
 </div>
 
-<app-kboard [value]="board" #kboard="kboardCtrl" (onValid)="formStatus($event)">
+<app-kboard [value]="board" #kboard="kboardCtrl" 
+		(onValid)="formStatus($event)" (onCancel)="back()">
 	<div #submit>
 		<button class="btn btn-danger" type="button"
 				[style.background-image]="btnStyle"

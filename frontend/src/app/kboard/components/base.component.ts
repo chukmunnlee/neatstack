@@ -2,7 +2,12 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 export class BaseComponent {
 
-	constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
+	private prevUrl = '/'
+
+	constructor(private router: Router, private activatedRoute: ActivatedRoute) { 
+		this.prevUrl = this.router.getCurrentNavigation().initialUrl.toString()
+		console.info('prevUrl = ', this.prevUrl)
+	}
 
 	getRouteParam(name: string): string {
 		return (this.activatedRoute.snapshot.params[name])
@@ -13,7 +18,7 @@ export class BaseComponent {
 	}
 
 	back() {
-		this.navigateTo('..')
+		this.navigateTo(this.prevUrl)
 	}
 
 	navigateTo(...path: string[]) {

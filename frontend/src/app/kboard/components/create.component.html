@@ -5,5 +5,5 @@
 </div>
 
 <app-kboard #kboard="kboardCtrl"
-		(onSubmit)="process($event)">
+		(onSubmit)="process($event)" (onCancel)="back()">
 </app-kboard>

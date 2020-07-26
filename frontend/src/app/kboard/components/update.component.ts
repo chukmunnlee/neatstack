@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
 import {BaseComponent} from './base.component';
 import {KboardService} from '../kboard.service';
 import {Kboard} from '../../../../../common/models';
+import {EditRouteGuardPredicate} from '../kboard-route-guard';
+import {KboardComponent} from './kboard.component';
+
 import { mergeBoard } from '../../../../../common/utils';
 
 @Component({
@@ -11,7 +14,11 @@ import { mergeBoard } from '../../../../../common/utils';
   templateUrl: './update.component.html',
   styleUrls: ['./update.component.css']
 })
-export class UpdateComponent extends BaseComponent implements OnInit {
+export class UpdateComponent extends BaseComponent 
+		implements OnInit, EditRouteGuardPredicate {
+
+	@ViewChild('kboard')
+	kboardCtrl: KboardComponent
 
 	boardId: string;
 	board: Kboard
@@ -39,6 +46,15 @@ export class UpdateComponent extends BaseComponent implements OnInit {
 		this.enableBtn = s
 	}
 
+	evaluate() {
+		// if form is dirty -> dont want to leave
+		return (!this.kboardCtrl.boardGroup.dirty)
+	}
+
+	confirmMessage() {
+		return ('You have unsaved data.\nDo you wish to leave?')
+	}
+
 	progress(p: number) {
 		console.info('progress: ', p)
 		if (p <= 0)
@@ -56,7 +72,10 @@ export class UpdateComponent extends BaseComponent implements OnInit {
 	update(p: Partial<Kboard>) {
 		const board = mergeBoard(p, this.board)
 		this.kboardSvc.updateBoard(board)
-			.then(result => console.info(`Number of records updated: ${result}`))
+			.then(result => {
+				console.info(`Number of records updated: ${result}`)
+				this.kboardCtrl.initializeForm()
+			})
 			.catch(error => console.error('ERROR updateBoard: ', error))
 			.finally(() => this.navigateTo('../../'))
 	}

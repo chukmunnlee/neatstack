@@ -34,6 +34,9 @@ export class KboardComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Output()
 	onValid = new BehaviorSubject<boolean>(false)
 
+	@Output()
+	onCancel = new Subject<void>()
+
 	@Input()
 	get value(): Partial<Kboard> {
 		return (this.boardGroup.value)
@@ -74,6 +77,10 @@ export class KboardComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 	processForm() {
 		this.onSubmit.next(this.value)
+	}
+
+	cancel() {
+		this.onCancel.next()
 	}
 
 	isControlValid(ctrlName: string, idx = -1): boolean {

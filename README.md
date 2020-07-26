@@ -9,6 +9,7 @@ Slides available [https://bit.ly/neatstack](https://bit.ly/neatstack).
 
 ### NEAT App Season 01 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402mH0wWGiuFsE12tzxji5AU)
 
++ *Part 13* [CanDeactivate Route Guard](https://www.youtube.com/watch?v=rbgH1Z44_AY)
 + *Part 12* [Directive and Reactive](https://www.youtube.com/watch?v=c53LgqLyrwk)
 + *Part 11* [Content Projection](https://www.youtube.com/watch?v=Bdiv0eDXKBE)
 + *Part 10* [Dynamic Routes](https://www.youtube.com/watch?v=d_uTNfcSgCE)
