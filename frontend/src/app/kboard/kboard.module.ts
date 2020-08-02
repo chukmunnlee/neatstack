@@ -11,6 +11,8 @@ import { UpdateComponent } from './components/update.component';
 import { HoldToDeleteDirective } from './directives/hold-to-delete.directive';
 import { EditRouteGuard } from './kboard-route-guard'
 
+import { UiModule } from '../ui/ui.module'
+
 const ROUTES: Routes = [
 	{ path: '', component: MainKboardComponent },
 	{ path: 'create', component: CreateComponent, canDeactivate: [ EditRouteGuard ] },
@@ -22,7 +24,8 @@ const ROUTES: Routes = [
 	imports: [
 		CommonModule,
 		FormsModule, ReactiveFormsModule,
-		RouterModule.forChild(ROUTES)
+		RouterModule.forChild(ROUTES),
+		UiModule
 	],
 	providers: [ KboardService, EditRouteGuard ],
 	exports: [ RouterModule ]

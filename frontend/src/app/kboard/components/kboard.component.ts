@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, ElementRef, ContentChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, 
-	Validators, AbstractControl, ValidationErrors } from '@angular/forms'
+	Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms'
 import { animate, transition, trigger, state, style } from '@angular/animations';
 import {Subject, BehaviorSubject, Subscription} from 'rxjs';
 
@@ -10,6 +10,13 @@ const nonWhiteSpace = (ctrl: AbstractControl) => {
 	if (ctrl.value.trim().length > 0)
 		return (null)
 	return { nonWhiteSpace: true } as ValidationErrors
+}
+
+const trimWhiteSpace = (validator: ValidatorFn): ValidatorFn => {
+	return (ctrl: AbstractControl): ValidationErrors | null => {
+		// hack to trim the value
+		return (validator({ value: ctrl.value.trim() } as AbstractControl))
+	}
 }
 
 const voidStyle = style({ opacity: 0, transform: 'translateY(-100%)' })
@@ -39,7 +46,11 @@ export class KboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	@Input()
 	get value(): Partial<Kboard> {
-		return (this.boardGroup.value)
+		const v = {
+			...this.boardGroup.value,
+			createdBy: this.boardGroup.value['createdBy'].trim()
+		}
+		return (v)
 	}
 	set value(v: Partial<Kboard>) {
 		this.initializeForm(v)
@@ -112,7 +123,7 @@ export class KboardComponent implements OnInit, OnDestroy, AfterViewInit {
 				title: this.fb.control(b? b.title: ''
 						, [ Validators.required, Validators.minLength(3), nonWhiteSpace ]),
 				createdBy: this.fb.control(b? b.createdBy: ''
-						, [ Validators.required, Validators.email ]),
+						, [ Validators.required, trimWhiteSpace(Validators.email) ]),
 				comments: this.fb.control(b? b.comments: ''),
 				cards: this.createCards(b? b.cards: [])
 			})

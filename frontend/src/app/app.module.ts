@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './components/main.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const ROUTES: Routes = [
 	{ path: '', component: MainComponent },
@@ -19,7 +20,8 @@ const ROUTES: Routes = [
   ],
   imports: [
 		BrowserModule, BrowserAnimationsModule,
-		RouterModule.forRoot(ROUTES)
+		RouterModule.forRoot(ROUTES),
+		NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

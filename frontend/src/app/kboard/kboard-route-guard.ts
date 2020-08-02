@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core'
 import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router'
 import {Observable} from 'rxjs'
 
+import { UiService } from '../ui/ui.service'
+
 export interface EditRouteGuardPredicate {
 	evaluate(): boolean
 	confirmMessage(): string
@@ -10,6 +12,8 @@ export interface EditRouteGuardPredicate {
 @Injectable()
 export class EditRouteGuard implements CanDeactivate<EditRouteGuardPredicate> {
 
+	constructor(private uiSvc: UiService) { }
+
 	canDeactivate(comp: EditRouteGuardPredicate, currRoute: ActivatedRouteSnapshot
 			, currState: RouterStateSnapshot)
 		: boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> {
@@ -17,7 +21,7 @@ export class EditRouteGuard implements CanDeactivate<EditRouteGuardPredicate> {
 		console.info('canDeactivate: ', comp)
 
 		if (!comp.evaluate())
-			return (confirm(comp.confirmMessage()))
+			return (this.uiSvc.confirm(comp.confirmMessage()))
 
 		return (true)
 	}
