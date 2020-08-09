@@ -1,7 +1,23 @@
 <div class="row mt-3 mb-1">
-	<div class="col">
-		<h2><code>app.component.html</code></h2>
+	<div class="col d-flex justify-content-center">
+		<img class="img-fluid" src="assets/welcome.png" width="90%">
 	</div>
 </div>
 
+<a href="https://github.com/chukmunnlee/neatstack">
+	<img style="position: absolute; top: 0; right: 0; border: 0;" src="assets/forkme.png" alt="Fork me on GitHub">
+</a>
+
 <router-outlet></router-outlet>
+
+<div class="row">
+	<div class="col">
+		<button class="btn btn-sm" type="button" (click)="shareIt()">
+			<span class="fa-stack">
+				<i class="fas fa-share-alt fa-stack-1x"></i>
+				<i *ngIf="!share"
+					class="fas fa-ban fa-stack-2x" style="color: red;"></i>
+			</span>
+		</button>
+	</div>
+</div>

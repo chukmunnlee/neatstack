@@ -27,6 +27,7 @@ export class HoldToDeleteDirective {
 	}
 
 	@HostListener('mousedown')
+	@HostListener('touchstart')
 	mousedown() {
 		console.info('mouse down')
 		interval(INTERVAL)
@@ -48,6 +49,7 @@ export class HoldToDeleteDirective {
 	}
 
 	@HostListener('mouseup')
+	@HostListener('touchend')
 	mouseup() {
 		console.info('mouse up')
 		this.btnState.next(true)

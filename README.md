@@ -5,10 +5,13 @@ Demo of a web application stack based on [NestJS](https://nestjs.com/),
 
 Slides available [https://bit.ly/neatstack](https://bit.ly/neatstack).
 
+Access application here [https://neatapp-abcde.web.app](https://neatapp-abcde.web.app/)
+
 ## Youtube Videos
 
 ### NEAT App Season 01 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402mH0wWGiuFsE12tzxji5AU)
 
++ *Part 15* [Service Worker, Web Share API and Firebase Hosting](https://www.youtube.com/watch?v=lsR-6HsHE_g)
 + *Part 14* [Using ng-bootstrap Components](https://www.youtube.com/watch?v=P_EhtbZZMVc)
 + *Part 13* [CanDeactivate Route Guard](https://www.youtube.com/watch?v=rbgH1Z44_AY)
 + *Part 12* [Directive and Reactive](https://www.youtube.com/watch?v=c53LgqLyrwk)

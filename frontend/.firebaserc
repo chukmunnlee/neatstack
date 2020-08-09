@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "neatapp-abcde": {
+      "hosting": {
+        "frontend": [
+          "neatapp-abcde"
+        ]
+      }
+    }
+  }
+}
