@@ -1,0 +1,11 @@
+:8080 {
+	root * ./frontend
+	file_server
+	encode gzip
+	log {
+		format logfmt
+	}
+	handle_errors {
+		redir * /index.html
+	}
+}

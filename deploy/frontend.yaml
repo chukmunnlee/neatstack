@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: fe-deploy
+   labels:
+      name: fe-deploy
+spec:
+   replicas: 2
+   selector:
+      matchLabels:
+         name: fe-pod
+   template:
+      metadata:
+         name: fe-pod
+         labels:
+            name: fe-pod
+      spec:
+         containers:
+         - name: fe-container
+           image: chukmunnlee/neatstack:v1
+           imagePullPolicy: IfNotPresent
+           ports:
+           - name: fe-port
+             containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: fe-svc
+   labels:
+      name: fe-svc
+spec:
+   type: ClusterIP
+   selector:
+      name: fe-pod
+   ports:
+   - name: fe-svc-port
+     port: 80
+     targetPort: fe-port
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+   name: fe-ing
+   labels:
+      name: fe-ing
+
+spec:
+   ingressClassName: nginx
+   rules:
+   - host: fe-192.168.39.106.nip.io
+     http:
+        paths:
+        - path: /
+          backend:
+             serviceName: fe-svc
+             servicePort: fe-svc-port
+   tls:
+   - hosts: 
+     - fe-192.168.39.106.nip.io
+     secretName: fe-tls-secret
