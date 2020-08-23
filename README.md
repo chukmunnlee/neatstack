@@ -11,6 +11,7 @@ Access application here [https://neatapp-abcde.web.app](https://neatapp-abcde.we
 
 ### NEAT App Season 01 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402mH0wWGiuFsE12tzxji5AU)
 
++ *Part 17* [Deployment - Building an Executable with Golang ](https://www.youtube.com/watch?v=Jrn8XWBagxY)
 + *Part 16* [Deployment - Docker and Kubernetes](https://www.youtube.com/watch?v=O3yg-1llx34)
 + *Part 15* [Deployment - Web Hosting](https://www.youtube.com/watch?v=lsR-6HsHE_g)
 + *Part 14* [Using ng-bootstrap Components](https://www.youtube.com/watch?v=P_EhtbZZMVc)
