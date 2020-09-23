@@ -9,6 +9,10 @@ Access application here [https://neatapp-abcde.web.app](https://neatapp-abcde.we
 
 ## Youtube Videos
 
+### NEAT App Season 02 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402pChYdFRKUNFK0r6086gr2)
+
++ *Part 18* [Scaffolding a NestJS application](https://www.youtube.com/watch?v=4x7Fk6NVwVo)
+
 ### NEAT App Season 01 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402mH0wWGiuFsE12tzxji5AU)
 
 + *Part 17* [Deployment - Building an Executable with Golang ](https://www.youtube.com/watch?v=Jrn8XWBagxY)
