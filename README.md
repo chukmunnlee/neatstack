@@ -11,6 +11,8 @@ Access application here [https://neatapp-abcde.web.app](https://neatapp-abcde.we
 
 ### NEAT App Season 02 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402pChYdFRKUNFK0r6086gr2)
 
+
++ *Part 19* [Preparing the Data Model and Connection Pool](https://www.youtube.com/watch?v=cVGr8tkURJs)
 + *Part 18* [Scaffolding a NestJS application](https://www.youtube.com/watch?v=4x7Fk6NVwVo)
 
 ### NEAT App Season 01 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402mH0wWGiuFsE12tzxji5AU)
