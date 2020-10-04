@@ -18,6 +18,8 @@ const argv = yargs.option({
 async function bootstrap(port: number) {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+	app.enableShutdownHooks()
+
 	app.disable('x-powered-by')
 
 	app.use(morgan('combined'))
