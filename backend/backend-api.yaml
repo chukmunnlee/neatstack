@@ -1,0 +1,74 @@
+openapi: "3.0.3"
+info: 
+   version: "1.0.0"
+   title: NEATApp
+
+
+servers:
+- description: Development Server
+  url: http://localhost:8080/api
+
+paths:
+   /kboards/{userId}:
+      get:
+         description: Get a list of boards for a user
+         operationId: getKboardsByUserId
+         parameters:
+         - name: userId
+           in: path
+           required: true
+           schema:
+              type: string
+         - name: limit
+           in: query
+           schema:
+              type: integer
+              default: 10
+              minimim: 1
+         - name: offset
+           in: query
+           schema:
+              type: integer
+              default: 0
+              minimim: 0
+         responses:
+            '200':
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/GetKboardsResponse"
+
+components:
+   schemas:
+      KboardSummary:
+         type: object
+         properties:
+            userId:
+               type: string
+            createdBy: 
+               type: string
+               format: email
+            boardId: 
+               type: string
+            title: 
+               type: string
+            cardCount: 
+               type: integer
+               minimim: 0
+         required: [ "userId", "createdBy", "boardId", "title", "cardCount" ]
+
+      GetKboardsResponse:
+         type: object
+         properties:
+            timestamp:
+               type: integer
+            statusCode:
+               type: integer
+            limit:
+               type: integer
+            offset:
+               type: integer
+            data:
+               $ref: "#/components/schemas/KboardSummary"
+         required: [ "timestamp", "statusCode", "limit", "offset", "data" ]

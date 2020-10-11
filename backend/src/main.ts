@@ -19,6 +19,7 @@ async function bootstrap(port: number) {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 	app.enableShutdownHooks()
+	app.setGlobalPrefix('api')
 
 	app.disable('x-powered-by')
 

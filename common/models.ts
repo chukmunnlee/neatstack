@@ -1,3 +1,11 @@
+export interface KboardSummary {
+	userId: string;
+	boardId: string;
+	createdBy: string;
+	title: string;
+	cardCount: number;
+}
+
 export interface Kboard {
 	boardId: string;
 	createdOn: number;
