@@ -1,4 +1,4 @@
-import {KboardSummary} from './models'
+import {KboardSummary, Kboard} from './models'
 
 export interface ResponseBase {
 	timestamp: number;
@@ -10,4 +10,8 @@ export interface GetKboardsResponse extends ResponseBase {
 	data: KboardSummary[];
 	limit: number;
 	offset: number;
+}
+
+export interface GetKboardResponse extends ResponseBase {
+	data: Kboard;
 }

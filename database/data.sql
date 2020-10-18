@@ -24,3 +24,7 @@ insert into kcard(board_id, description, priority) values
 	(@board_id, 'Todo #1', 0),
 	(@board_id, 'Todo #2', 1);
 
+set @board_id = 'wxyz1234';
+
+insert into kboard(board_id, user_id, title, comments, created_on) values
+	(@board_id, @user_id, 'My Third Board', '', current_timestamp());

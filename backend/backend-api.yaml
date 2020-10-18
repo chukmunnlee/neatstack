@@ -39,6 +39,34 @@ paths:
                      schema:
                         $ref: "#/components/schemas/GetKboardsResponse"
 
+   /kboard/{userId}/{boardId}:
+      get:
+         description: Get kboard with boardId for user 
+         operationId: getKboardByUserIdAndBoardId
+         parameters:
+         - name: userId
+           in: path
+           required: true
+           schema:
+              type: string
+         - name: boardId
+           in: path
+           required: true
+           schema:
+              type: string
+         responses:
+            '200':
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/GetKboardResponse"
+            '404':
+               description: Success
+               content:
+                  text/plain:
+                     type: string
+
 components:
    schemas:
       KboardSummary:
@@ -58,6 +86,42 @@ components:
                minimim: 0
          required: [ "userId", "createdBy", "boardId", "title", "cardCount" ]
 
+      Kcard:
+         type: object
+         properties:
+            description:
+               type: string
+            priority:
+               type: integer
+               minimim: 0
+               maximum: 2
+         required: [ "description", "priority" ]
+
+      Kboard:
+         type: object
+         properties:
+            boardId:
+               type: string
+            createdOn:
+               type: string
+               format: date-type
+            updatedOn:
+               type: string
+               format: date-type
+            title:
+               type: string
+            createdBy: 
+               type: string
+            comments:
+               type: string
+            cards:
+               type: array
+               items:
+                  $ref: "#/components/schemas/Kcard"
+               minItems: 0
+
+         required: [ "createdOn", "createdBy", "boardId", "title", "cards" ]
+
       GetKboardsResponse:
          type: object
          properties:
@@ -70,5 +134,18 @@ components:
             offset:
                type: integer
             data:
-               $ref: "#/components/schemas/KboardSummary"
+               type: array
+               items:
+                  $ref: "#/components/schemas/KboardSummary"
          required: [ "timestamp", "statusCode", "limit", "offset", "data" ]
+
+      GetKboardResponse:
+         type: object
+         properties:
+            timestamp:
+               type: integer
+            statusCode:
+               type: integer
+            data:
+               $ref: "#/components/schemas/Kboard"
+         required: [ "timestamp", "statusCode", "data" ]

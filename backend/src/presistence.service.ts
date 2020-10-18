@@ -1,19 +1,47 @@
 import {Injectable, OnApplicationBootstrap, OnApplicationShutdown} from "@nestjs/common";
 import { ConfigService} from '@nestjs/config'
 import {PoolOptions} from "mysql2";
-import {Pool, createPool, RowDataPacket} from "mysql2/promise";
+import {Pool, createPool, RowDataPacket, OkPacket, ResultSetHeader, FieldPacket} from "mysql2/promise";
 
 import {KboardDatabase} from 'common/persistence'
-import {KboardSummary} from "common/models";
+import {KboardSummary, Kboard, Kcard} from "common/models";
 
 const SQL_GET_KBOARDS = 'select * from kboard_summary where user_id like ? limit ? offset ?';
+
+const SQL_GET_KBOARD = `
+	select c.*, b.* from kboard b
+		left join kcard c
+		on b.board_id = c.board_id
+		where b.user_id = ? and b.board_id = ?
+`
+
+type mkQueryResult = [ RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] 
+		| ResultSetHeader, FieldPacket[] ]
+
+type mkQueryFunction = (p: any[]) => Promise<mkQueryResult>;
+
+const mkQuery = function(sql: string, pool: Pool) {
+	return async function(params: any[]): Promise<mkQueryResult> {
+		const conn = await pool.getConnection()
+		try {
+			return conn.query(sql, params)
+		} catch(e) {
+			console.error(`ERROR: ${sql}: `, e)
+			return Promise.reject(e)
+		} finally {
+			conn.release()
+		}
+	}
+}
 
 @Injectable()
 export class PersistenceService 
 	implements OnApplicationBootstrap, OnApplicationShutdown, KboardDatabase {
 
 	private options: PoolOptions;
-	private pool: Pool
+	private pool: Pool;
+
+	private _getKboard: mkQueryFunction;
 
 	constructor(configSvc: ConfigService) {
 		this.options = {
@@ -25,6 +53,30 @@ export class PersistenceService
 			timezone: configSvc.get<string>('DB_TIMEZONE', '+08:00'),
 			connectionLimit: configSvc.get<number>('DB_CONNECTION_LIMIT', 2),
 		}
+	}
+
+	async getKboard(userId: string, boardId: string): Promise<Kboard> {
+		const [ result, _ ] = await this._getKboard([ userId, boardId ]) as RowDataPacket[][]
+		if (!result.length)
+			return null
+		const kboard: Kboard = {
+			boardId: result[0].board_id,
+			createdOn: new Date(result[0].created_on).getTime(),
+			updatedOn: result[0].updated_on? new Date(result[0].updated_on).getTime(): null,
+			title: result[0].title,
+			createdBy: result[0].user_id,
+			comments: result[0].comments,
+			cards: []
+		}
+
+		if (result[0].card_id)
+			kboard.cards = result.map(r => {
+				return {
+					description: r.description,
+					priority: r.priority
+				} as Kcard
+			})
+		return kboard
 	}
 
 	async getKboards(userId: string, limit = 10, offset = 0): Promise<KboardSummary[]> {
@@ -61,6 +113,8 @@ export class PersistenceService
 		try {
 			console.info('PINGing database')
 			await conn.ping()
+
+			this._getKboard = mkQuery(SQL_GET_KBOARD, this.pool)
 		} catch(e) {
 			console.error('ERROR: Fail to PING database: ', e)
 			return Promise.reject(e)
