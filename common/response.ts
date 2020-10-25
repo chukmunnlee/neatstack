@@ -15,3 +15,7 @@ export interface GetKboardsResponse extends ResponseBase {
 export interface GetKboardResponse extends ResponseBase {
 	data: Kboard;
 }
+
+export interface PostKboardResponse extends ResponseBase {
+	data: string;
+}

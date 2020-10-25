@@ -24,13 +24,13 @@ paths:
            schema:
               type: integer
               default: 10
-              minimim: 1
+              minimum: 1
          - name: offset
            in: query
            schema:
               type: integer
               default: 0
-              minimim: 0
+              minimum: 0
          responses:
             '200':
                description: Success
@@ -38,6 +38,30 @@ paths:
                   application/json:
                      schema:
                         $ref: "#/components/schemas/GetKboardsResponse"
+
+   /kboard/{userId}:
+      post:
+         description: Add an new Kboard for user
+         operationId: insertKboard
+         parameters:
+         - name: userId
+           in: path
+           required: true
+           schema:
+              type: string
+         requestBody:
+            description: New Kboard data
+            content:
+               application/json:
+                  schema:
+                     $ref: "#/components/schemas/PartialKboard"
+         responses:
+            '201':
+               description: Created
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/PostKboardResponse"
 
    /kboard/{userId}/{boardId}:
       get:
@@ -65,7 +89,8 @@ paths:
                description: Success
                content:
                   text/plain:
-                     type: string
+                     schema:
+                        type: string
 
 components:
    schemas:
@@ -83,7 +108,7 @@ components:
                type: string
             cardCount: 
                type: integer
-               minimim: 0
+               minimum: 0
          required: [ "userId", "createdBy", "boardId", "title", "cardCount" ]
 
       Kcard:
@@ -93,7 +118,7 @@ components:
                type: string
             priority:
                type: integer
-               minimim: 0
+               minimum: 0
                maximum: 2
          required: [ "description", "priority" ]
 
@@ -119,8 +144,23 @@ components:
                items:
                   $ref: "#/components/schemas/Kcard"
                minItems: 0
-
          required: [ "createdOn", "createdBy", "boardId", "title", "cards" ]
+
+      PartialKboard:
+         type: object
+         properties:
+            title:
+               type: string
+            createdBy: 
+               type: string
+            comments:
+               type: string
+            cards:
+               type: array
+               items:
+                  $ref: "#/components/schemas/Kcard"
+               minItems: 0
+         required: [ "title", "createdBy", "cards" ]
 
       GetKboardsResponse:
          type: object
@@ -148,4 +188,15 @@ components:
                type: integer
             data:
                $ref: "#/components/schemas/Kboard"
+         required: [ "timestamp", "statusCode", "data" ]
+
+      PostKboardResponse:
+         type: object
+         properties:
+            timestamp:
+               type: integer
+            statusCode:
+               type: integer
+            data:
+               type: string
          required: [ "timestamp", "statusCode", "data" ]

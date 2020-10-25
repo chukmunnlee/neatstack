@@ -2,6 +2,7 @@ import {Injectable, OnApplicationBootstrap, OnApplicationShutdown} from "@nestjs
 import { ConfigService} from '@nestjs/config'
 import {PoolOptions} from "mysql2";
 import {Pool, createPool, RowDataPacket, OkPacket, ResultSetHeader, FieldPacket} from "mysql2/promise";
+import { v4 as uuidv4 } from 'uuid'
 
 import {KboardDatabase} from 'common/persistence'
 import {KboardSummary, Kboard, Kcard} from "common/models";
@@ -13,6 +14,16 @@ const SQL_GET_KBOARD = `
 		left join kcard c
 		on b.board_id = c.board_id
 		where b.user_id = ? and b.board_id = ?
+`
+
+const SQL_INSERT_KBOARD = `
+	insert into kboard(board_id, user_id, title, comments, created_on)
+	values (?, ?, ?, ?, from_unixtime(? / 1000))
+`
+
+const SQL_INSERT_KCARD = `
+	insert into kcard(board_id, description, priority)
+	values (?, ?, ?)
 `
 
 type mkQueryResult = [ RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] 
@@ -55,6 +66,35 @@ export class PersistenceService
 		}
 	}
 
+	async insertKboard(board: Partial<Kboard>): Promise<string> {
+		const boardId = uuidv4().toString().substring(0, 8)
+		const createdOn = (new Date()).getTime()
+		const conn = await this.pool.getConnection();
+		try {
+			await conn.beginTransaction()
+			// insert kboard, createdBy - user_id not email 
+			await conn.query(SQL_INSERT_KBOARD,
+				[ boardId, board.createdBy, board.title, board.comments, createdOn ])
+			
+			// for every kcard - perform an insert
+			if (board.cards) 
+				await Promise.all(
+					board.cards.map(
+						c => conn.query(SQL_INSERT_KCARD, 
+							[ boardId, c.description, c.priority ])
+					)
+				)
+			await conn.commit()
+		} catch(e) {
+			await conn.rollback()
+			console.error('ERROR: insertKboard: ', e)
+			return Promise.reject(e)
+		} finally {
+			conn.release()
+		}
+		return boardId
+	}
+
 	async getKboard(userId: string, boardId: string): Promise<Kboard> {
 		const [ result, _ ] = await this._getKboard([ userId, boardId ]) as RowDataPacket[][]
 		if (!result.length)
@@ -89,7 +129,7 @@ export class PersistenceService
 			return recs.map(r => {
 				return {
 					userId: r['user_id'],
-					createdBy: r['email'],
+					createdBy: r['user_id'],
 					boardId: r['board_id'],
 					title: r['title'],
 					cardCount: r['card_count']

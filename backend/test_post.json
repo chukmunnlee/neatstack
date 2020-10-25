@@ -1,0 +1,9 @@
+{
+	"createdBy": "fred",
+	"title": "My new board",
+	"comments": "Test board for insert",
+	"cards": [
+		{ "description": "Card #1", "priority": 0 },
+		{ "description": "Card #2", "priority": 1 }
+	]
+}
