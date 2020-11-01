@@ -1,5 +1,5 @@
 import { Controller, 
-	Get, Post,
+	Get, Post, Delete,
 	Param, Body,
 	InternalServerErrorException, NotFoundException, 
 	HttpCode, HttpStatus, 
@@ -7,7 +7,7 @@ import { Controller,
 
 import { KboardDatabase } from 'common/persistence'
 import {PersistenceService} from 'src/presistence.service';
-import { GetKboardResponse, PostKboardResponse } from 'common/response'
+import { GetKboardResponse, PostKboardResponse, DeleteKboardResponse } from 'common/response'
 import { Kboard } from 'common/models';
 import { mkResponse } from 'common/utils'
 
@@ -31,6 +31,21 @@ export class KboardController {
 		} catch(e) {
 			console.error('ERROR: postKboard: ', e)
 			throw new InternalServerErrorException(e)
+		}
+	}
+
+	@Delete(':boardId')
+	@HttpCode(HttpStatus.OK)
+	async deleteKboard(@Param('userId') userId: string,
+			@Param('boardId') boardId: string): Promise<DeleteKboardResponse> {
+
+		try {
+			const response = mkResponse<DeleteKboardResponse>(HttpStatus.OK)
+			response.data = await this.kboardDB.deleteKboard(userId, boardId)
+			return response
+		} catch(e) {
+			console.error('ERROR: deleteKboard: ', e)
+			return Promise.reject(e)
 		}
 	}
 

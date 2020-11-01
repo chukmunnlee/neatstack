@@ -5,5 +5,7 @@ export interface KboardDatabase {
 
 	getKboard(userId: string, boardId: string): Promise<Kboard>;
 
+	deleteKboard(userId: string, boardId: string): Promise<boolean>;
+
 	insertKboard(board: Partial<Kboard>): Promise<string>;
 }

@@ -19,3 +19,7 @@ export interface GetKboardResponse extends ResponseBase {
 export interface PostKboardResponse extends ResponseBase {
 	data: string;
 }
+
+export interface DeleteKboardResponse extends ResponseBase {
+	data: boolean;
+}

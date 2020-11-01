@@ -92,6 +92,28 @@ paths:
                      schema:
                         type: string
 
+      delete:
+         description: Delete kboard with boardId for user 
+         operationId: deleteKboardByUserIdAndBoardId
+         parameters:
+         - name: userId
+           in: path
+           required: true
+           schema:
+              type: string
+         - name: boardId
+           in: path
+           required: true
+           schema:
+              type: string
+         responses:
+            '200':
+               description: Deleted
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/DeleteKboardResponse"
+
 components:
    schemas:
       KboardSummary:
@@ -188,6 +210,17 @@ components:
                type: integer
             data:
                $ref: "#/components/schemas/Kboard"
+         required: [ "timestamp", "statusCode", "data" ]
+
+      DeleteKboardResponse:
+         type: object
+         properties:
+            timestamp:
+               type: integer
+            statusCode:
+               type: integer
+            data:
+               type: boolean
          required: [ "timestamp", "statusCode", "data" ]
 
       PostKboardResponse:

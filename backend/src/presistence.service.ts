@@ -21,6 +21,8 @@ const SQL_INSERT_KBOARD = `
 	values (?, ?, ?, ?, from_unixtime(? / 1000))
 `
 
+const SQL_DELETE_KBOARD = 'delete from kboard where user_id = ? and board_id = ?'
+
 const SQL_INSERT_KCARD = `
 	insert into kcard(board_id, description, priority)
 	values (?, ?, ?)
@@ -53,6 +55,7 @@ export class PersistenceService
 	private pool: Pool;
 
 	private _getKboard: mkQueryFunction;
+	private _deleteKboard: mkQueryFunction;
 
 	constructor(configSvc: ConfigService) {
 		this.options = {
@@ -93,6 +96,11 @@ export class PersistenceService
 			conn.release()
 		}
 		return boardId
+	}
+
+	async deleteKboard(userId: string, boardId: string): Promise<boolean> {
+		const [ result ] = await this._deleteKboard([ userId, boardId ]) as OkPacket[]
+		return (result.affectedRows > 0)
 	}
 
 	async getKboard(userId: string, boardId: string): Promise<Kboard> {
@@ -155,6 +163,7 @@ export class PersistenceService
 			await conn.ping()
 
 			this._getKboard = mkQuery(SQL_GET_KBOARD, this.pool)
+			this._deleteKboard = mkQuery(SQL_DELETE_KBOARD, this.pool)
 		} catch(e) {
 			console.error('ERROR: Fail to PING database: ', e)
 			return Promise.reject(e)
