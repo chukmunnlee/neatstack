@@ -86,7 +86,35 @@ paths:
                      schema:
                         $ref: "#/components/schemas/GetKboardResponse"
             '404':
+               description: Not found
+               content:
+                  text/plain:
+                     schema:
+                        type: string
+
+      put:
+         description: Updte kboard with boardId for user 
+         operationId: updateKboardByUserIdAndBoardId
+         parameters:
+         - name: userId
+           in: path
+           required: true
+           schema:
+              type: string
+         - name: boardId
+           in: path
+           required: true
+           schema:
+              type: string
+         responses:
+            '200':
                description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/PutKboardResponse"
+            '400':
+               description: Bad request
                content:
                   text/plain:
                      schema:
@@ -213,6 +241,17 @@ components:
          required: [ "timestamp", "statusCode", "data" ]
 
       DeleteKboardResponse:
+         type: object
+         properties:
+            timestamp:
+               type: integer
+            statusCode:
+               type: integer
+            data:
+               type: boolean
+         required: [ "timestamp", "statusCode", "data" ]
+
+      PutKboardResponse:
          type: object
          properties:
             timestamp:

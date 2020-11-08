@@ -1,13 +1,15 @@
 import { Controller, 
-	Get, Post, Delete,
+	Get, Post, Delete, Put,
 	Param, Body,
 	InternalServerErrorException, NotFoundException, 
-	HttpCode, HttpStatus, 
+	HttpCode, HttpStatus, BadRequestException, 
 } from '@nestjs/common';
 
 import { KboardDatabase } from 'common/persistence'
 import {PersistenceService} from 'src/presistence.service';
-import { GetKboardResponse, PostKboardResponse, DeleteKboardResponse } from 'common/response'
+import { 
+	GetKboardResponse, PostKboardResponse, DeleteKboardResponse, PutKboardResponse 
+} from 'common/response'
 import { Kboard } from 'common/models';
 import { mkResponse } from 'common/utils'
 
@@ -31,6 +33,25 @@ export class KboardController {
 		} catch(e) {
 			console.error('ERROR: postKboard: ', e)
 			throw new InternalServerErrorException(e)
+		}
+	}
+
+	@Put(':boardId')
+	@HttpCode(HttpStatus.OK)
+	async putKboard(@Param('userId') userId: string,
+			@Param('boardId') boardId: string,
+			@Body() payload: Kboard): Promise<PutKboardResponse> {
+
+		if (boardId != payload.boardId)
+			throw new BadRequestException(`Error: Incorrect boardId: ${boardId}`)
+
+		try {
+			const response = mkResponse<PutKboardResponse>(HttpStatus.OK)
+			response.data = await this.kboardDB.updateKboard(payload)
+			return (response)
+		} catch(e) {
+			console.error('ERROR: putKboard: ', e)
+			return Promise.reject(e)
 		}
 	}
 

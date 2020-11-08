@@ -23,6 +23,12 @@ const SQL_INSERT_KBOARD = `
 
 const SQL_DELETE_KBOARD = 'delete from kboard where user_id = ? and board_id = ?'
 
+const SQL_UPDATE_KBOARD = `
+	set @ok = false;
+	call update_kboard(?, @ok);
+	select @ok; 
+`;
+
 const SQL_INSERT_KCARD = `
 	insert into kcard(board_id, description, priority)
 	values (?, ?, ?)
@@ -56,6 +62,7 @@ export class PersistenceService
 
 	private _getKboard: mkQueryFunction;
 	private _deleteKboard: mkQueryFunction;
+	private _updateKboard: mkQueryFunction;
 
 	constructor(configSvc: ConfigService) {
 		this.options = {
@@ -66,6 +73,7 @@ export class PersistenceService
 			password: configSvc.get<string>('DB_PASSWORD', 'barney'),
 			timezone: configSvc.get<string>('DB_TIMEZONE', '+08:00'),
 			connectionLimit: configSvc.get<number>('DB_CONNECTION_LIMIT', 2),
+			multipleStatements: true
 		}
 	}
 
@@ -101,6 +109,17 @@ export class PersistenceService
 	async deleteKboard(userId: string, boardId: string): Promise<boolean> {
 		const [ result ] = await this._deleteKboard([ userId, boardId ]) as OkPacket[]
 		return (result.affectedRows > 0)
+	}
+
+	async updateKboard(board: Kboard): Promise<boolean> {
+		// result is a 3D array, 
+		// 1D - number of SQL statements executed - 3
+		// 2D - result from executing every statement
+		// 3D - field(s) of each record
+		const [ result, _ ] = await this._updateKboard([ JSON.stringify(board) ]);
+		const ok = result[2][0]['@ok']
+		console.info(`@ok: ${ok}`)
+		return (!!ok);
 	}
 
 	async getKboard(userId: string, boardId: string): Promise<Kboard> {
@@ -164,6 +183,7 @@ export class PersistenceService
 
 			this._getKboard = mkQuery(SQL_GET_KBOARD, this.pool)
 			this._deleteKboard = mkQuery(SQL_DELETE_KBOARD, this.pool)
+			this._updateKboard = mkQuery(SQL_UPDATE_KBOARD, this.pool)
 		} catch(e) {
 			console.error('ERROR: Fail to PING database: ', e)
 			return Promise.reject(e)

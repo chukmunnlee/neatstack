@@ -11,6 +11,7 @@ Access application here [https://neatapp-abcde.web.app](https://neatapp-abcde.we
 
 ### NEAT App Season 02 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402pChYdFRKUNFK0r6086gr2)
 
++ *Part 24* [Updating Boards](https://www.youtube.com/watch?v=WZj8brtP5P0)
 + *Part 23* [Deleting Boards](https://www.youtube.com/watch?v=EM0Nm-OqRlY)
 + *Part 22* [Transaction and the ACID Property](https://www.youtube.com/watch?v=PJ6vsff1tok)
 + *Part 21* [SQL Left Join](https://www.youtube.com/watch?v=c9J1_jDjmCs)

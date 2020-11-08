@@ -8,4 +8,6 @@ export interface KboardDatabase {
 	deleteKboard(userId: string, boardId: string): Promise<boolean>;
 
 	insertKboard(board: Partial<Kboard>): Promise<string>;
+
+	updateKboard(board: Kboard): Promise<boolean>;
 }

@@ -23,3 +23,7 @@ export interface PostKboardResponse extends ResponseBase {
 export interface DeleteKboardResponse extends ResponseBase {
 	data: boolean;
 }
+
+export interface PutKboardResponse extends ResponseBase {
+	data: boolean;
+}
