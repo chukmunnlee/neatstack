@@ -6,6 +6,8 @@ import * as yargs from 'yargs'
 import * as dotenv from 'dotenv'
 
 import { AppModule } from './app.module';
+import {ValidationPipe} from '@nestjs/common';
+import { ErrorHandlerFilter } from './utils/error-handler.filter';
 
 // look for .env
 dotenv.config()
@@ -20,6 +22,9 @@ async function bootstrap(port: number) {
 
 	app.enableShutdownHooks()
 	app.setGlobalPrefix('api')
+
+	app.useGlobalPipes(new ValidationPipe())
+	app.useGlobalFilters(new ErrorHandlerFilter())
 
 	app.disable('x-powered-by')
 

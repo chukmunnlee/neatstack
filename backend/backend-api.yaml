@@ -39,6 +39,13 @@ paths:
                      schema:
                         $ref: "#/components/schemas/GetKboardsResponse"
 
+            '500':
+               description: Error
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/KboardErrorResponse"
+
    /kboard/{userId}:
       post:
          description: Add an new Kboard for user
@@ -62,6 +69,12 @@ paths:
                   application/json:
                      schema:
                         $ref: "#/components/schemas/PostKboardResponse"
+            '400':
+               description: Bad argument
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/KboardErrorResponse"
 
    /kboard/{userId}/{boardId}:
       get:
@@ -88,9 +101,15 @@ paths:
             '404':
                description: Not found
                content:
-                  text/plain:
+                  application/json:
                      schema:
-                        type: string
+                        $ref: "#/components/schemas/KboardErrorResponse"
+            '500':
+               description: Error
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/KboardErrorResponse"
 
       put:
          description: Updte kboard with boardId for user 
@@ -114,11 +133,11 @@ paths:
                      schema:
                         $ref: "#/components/schemas/PutKboardResponse"
             '400':
-               description: Bad request
+               description: Error
                content:
-                  text/plain:
+                  application/json:
                      schema:
-                        type: string
+                        $ref: "#/components/schemas/KboardErrorResponse"
 
       delete:
          description: Delete kboard with boardId for user 
@@ -141,6 +160,12 @@ paths:
                   application/json:
                      schema:
                         $ref: "#/components/schemas/DeleteKboardResponse"
+            '500':
+               description: Error
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/KboardErrorResponse"
 
 components:
    schemas:
@@ -272,3 +297,21 @@ components:
             data:
                type: string
          required: [ "timestamp", "statusCode", "data" ]
+
+      KboardErrorResponse:
+         type: object
+         properties:
+            timestamp:
+               type: integer
+            statusCode:
+               type: integer
+            message:
+               type: string
+            data:
+               oneOf:
+               - type: string
+               - type: array
+                 items:
+                    type: string
+
+         required: [ "timestamp", "statusCode", "data", "message" ]

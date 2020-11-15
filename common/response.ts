@@ -27,3 +27,8 @@ export interface DeleteKboardResponse extends ResponseBase {
 export interface PutKboardResponse extends ResponseBase {
 	data: boolean;
 }
+
+export interface KboardErrorResponse extends ResponseBase {
+	data: string | string[];
+	message: string
+}

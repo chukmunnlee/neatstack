@@ -12,6 +12,7 @@ import {
 } from 'common/response'
 import { Kboard } from 'common/models';
 import { mkResponse } from 'common/utils'
+import { KboardImpl } from 'src/utils/models';
 
 @Controller('kboard/:userId')
 export class KboardController {
@@ -24,7 +25,7 @@ export class KboardController {
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
-	async postKboard(@Body() payload: any): Promise<PostKboardResponse> {
+	async postKboard(@Body() payload: KboardImpl): Promise<PostKboardResponse> {
 		try {
 			const boardId = await this.kboardDB.insertKboard(payload)
 			const response = mkResponse<PostKboardResponse>(HttpStatus.CREATED)
@@ -32,7 +33,7 @@ export class KboardController {
 			return response
 		} catch(e) {
 			console.error('ERROR: postKboard: ', e)
-			throw new InternalServerErrorException(e)
+			throw new BadRequestException(e)
 		}
 	}
 
@@ -40,7 +41,7 @@ export class KboardController {
 	@HttpCode(HttpStatus.OK)
 	async putKboard(@Param('userId') userId: string,
 			@Param('boardId') boardId: string,
-			@Body() payload: Kboard): Promise<PutKboardResponse> {
+			@Body() payload: KboardImpl): Promise<PutKboardResponse> {
 
 		if (boardId != payload.boardId)
 			throw new BadRequestException(`Error: Incorrect boardId: ${boardId}`)
@@ -51,7 +52,7 @@ export class KboardController {
 			return (response)
 		} catch(e) {
 			console.error('ERROR: putKboard: ', e)
-			return Promise.reject(e)
+			throw new BadRequestException(e)
 		}
 	}
 
@@ -66,7 +67,7 @@ export class KboardController {
 			return response
 		} catch(e) {
 			console.error('ERROR: deleteKboard: ', e)
-			return Promise.reject(e)
+			throw new InternalServerErrorException(e)
 		}
 	}
 
