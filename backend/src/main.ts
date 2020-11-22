@@ -14,13 +14,20 @@ dotenv.config()
 
 // from CLI option, from environment, fallback to default 
 const argv = yargs.option({
-	port: { type: 'number', default: parseInt(process.env.PORT) || 3000 }
+	port: { type: 'number', default: parseInt(process.env.PORT) || 3000 },
+	cors: { type: 'boolean', default: false }
 }).argv
 
-async function bootstrap(port: number) {
+async function bootstrap(argv) {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+	const port = argv.port
+	const cors = argv.cors
+
 	app.enableShutdownHooks()
+	if (cors)
+		app.enableCors()
+
 	app.setGlobalPrefix('api')
 
 	app.useGlobalPipes(new ValidationPipe())
@@ -33,6 +40,8 @@ async function bootstrap(port: number) {
 	app.listen(port)
 		.then(() => {
 			console.info(`Application started on port ${port} at ${new Date()}`)
+			console.info(`\tCORS: ${cors}`)
 		})
 }
-bootstrap(argv.port);
+
+bootstrap(argv);

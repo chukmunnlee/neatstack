@@ -1,6 +1,12 @@
-import { Kboard } from './models'
+import { Kboard, Kcard } from './models'
 
 import { ResponseBase } from './response'
+
+export const priorityToNumber = (card: Kcard) => {
+	// @ts-ignore
+	card.priority = parseInt(card.priority)
+	return card
+}
 
 export const mergeBoard = (p: Partial<Kboard>, b: Kboard): Kboard => {
 	const board: Kboard = {
@@ -9,7 +15,7 @@ export const mergeBoard = (p: Partial<Kboard>, b: Kboard): Kboard => {
 		title: p.title,
 		createdBy: p.createdBy,
 		comments: p.comments,
-		cards: p.cards
+		cards: p.cards.map(priorityToNumber)
 	}
 
 	return (board)

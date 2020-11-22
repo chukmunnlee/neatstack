@@ -1,13 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
 import {BaseComponent} from './base.component';
 import {KboardService} from '../kboard.service';
-import {Kboard} from '../../../../../common/models';
+import {Kboard} from 'common/models';
 import {EditRouteGuardPredicate} from '../kboard-route-guard';
 import {KboardComponent} from './kboard.component';
 
-import { mergeBoard } from '../../../../../common/utils';
+import { mergeBoard } from 'common/utils';
+import {PERSISTENCE_SERVICE} from '../kboard.module';
+import {KboardDatabase} from 'common/persistence';
+import {IdentityService} from 'src/app/identity.service';
 
 @Component({
   selector: 'app-update',
@@ -27,14 +30,15 @@ export class UpdateComponent extends BaseComponent
 	btnStyle = 'none'
 
 	constructor(router: Router, activatedRoute: ActivatedRoute
-				, private kboardSvc: KboardService) { 
+				, @Inject(PERSISTENCE_SERVICE) private kboardSvc: KboardDatabase
+				, private idSvc: IdentityService) { 
 	   super(router, activatedRoute)
 
 		this.boardId = this.getRouteParam('bId')
 	}
 	
 	ngOnInit(): void {
-		this.kboardSvc.findBoardById(this.boardId)
+		this.kboardSvc.getKboard(this.idSvc.getUserId(), this.boardId)
 			.then(result => {
 				this.board = result
 				console.info('board = ', this.board)
@@ -64,14 +68,14 @@ export class UpdateComponent extends BaseComponent
 	}
 
 	delete() {
-		this.kboardSvc.deleteBoard(this.board)
+		this.kboardSvc.deleteKboard(this.idSvc.getUserId(), this.boardId)
 			.catch(err => console.error('ERROR deleteBoard: ', err))
 			.finally(() => this.navigateTo('../..'))
 	}
 
 	update(p: Partial<Kboard>) {
 		const board = mergeBoard(p, this.board)
-		this.kboardSvc.updateBoard(board)
+		this.kboardSvc.updateKboard(board)
 			.then(result => {
 				console.info(`Number of records updated: ${result}`)
 				this.kboardCtrl.initializeForm()

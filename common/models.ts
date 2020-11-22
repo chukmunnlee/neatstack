@@ -18,7 +18,7 @@ export interface Kboard {
 
 export interface Kcard {
 	description: string;
-	priority: Priority;
+	priority: Priority | number;
 }
 
 export enum Priority {

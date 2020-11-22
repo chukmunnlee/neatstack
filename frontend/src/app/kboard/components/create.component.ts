@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from'@angular/router'
 
-import {Kboard} from '../../../../../common/models';
+import {Kboard} from 'common/models';
 import {KboardComponent} from './kboard.component';
 import {BaseComponent} from './base.component';
-import { KboardService } from '../kboard.service'
 import {EditRouteGuardPredicate} from '../kboard-route-guard';
+import {PERSISTENCE_SERVICE} from '../kboard.module';
+import {KboardDatabase} from 'common/persistence';
+import {priorityToNumber} from 'common/utils';
 
 @Component({
   selector: 'app-create',
@@ -19,7 +21,7 @@ export class CreateComponent extends BaseComponent
 	kboardCtrl: KboardComponent
 
 	constructor(router: Router, activatedRoute: ActivatedRoute
-				, private kboardSvc: KboardService) { 
+				, @Inject(PERSISTENCE_SERVICE) private kboardSvc: KboardDatabase) { 
 		super(router, activatedRoute)
 	}
 	
@@ -36,7 +38,8 @@ export class CreateComponent extends BaseComponent
 
 	process(board: Partial<Kboard>) {
 		console.info('CreateComponent: board = ', board)
-		this.kboardSvc.addBoard(board)
+		board.cards = board.cards.map(priorityToNumber)
+		this.kboardSvc.insertKboard(board)
 			.then(boardId => {
 				console.info('new boardId: ', boardId)
 				this.kboardCtrl.initializeForm()

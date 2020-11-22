@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormArray, FormControl,
 import { animate, transition, trigger, state, style } from '@angular/animations';
 import {Subject, BehaviorSubject, Subscription} from 'rxjs';
 
-import { Kboard, Kcard } from '../../../../../common/models'
+import { Kboard, Kcard } from 'common/models'
 
 const nonWhiteSpace = (ctrl: AbstractControl) => {
 	if (ctrl.value.trim().length > 0)
@@ -123,7 +123,7 @@ export class KboardComponent implements OnInit, OnDestroy, AfterViewInit {
 				title: this.fb.control(b? b.title: ''
 						, [ Validators.required, Validators.minLength(3), nonWhiteSpace ]),
 				createdBy: this.fb.control(b? b.createdBy: ''
-						, [ Validators.required, trimWhiteSpace(Validators.email) ]),
+						, [ Validators.required, Validators.min(3), Validators.max(16) ]),
 				comments: this.fb.control(b? b.comments: ''),
 				cards: this.createCards(b? b.cards: [])
 			})

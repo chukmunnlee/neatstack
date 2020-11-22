@@ -10,10 +10,10 @@
 			</div>
 			<div class="form-group required">
 				<label for="createdBy">Created By</label>
-				<input id="createdBy" class="form-control" type="email" 
+				<input id="createdBy" class="form-control" type="text" 
 						[ngClass]="{'is-invalid': !isControlValid('createdBy')}"
-						placeholder="Owner's email" formControlName="createdBy">
-				<div class="invalid-feedback">Please enter a valid email</div>
+						placeholder="Owner's user id" formControlName="createdBy">
+				<div class="invalid-feedback">Please enter your user id between 3 and 16 characters</div>
 			</div>
 			<div class="form-group">
 				<label for="comments">Comments</label>

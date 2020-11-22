@@ -15,7 +15,7 @@ export class KboardImpl implements Kboard {
 	@Length(1, 64)
 	title: string;
 
-	@Length(3, 15)
+	@Length(3, 16)
 	createdBy: string;
 
 	@IsOptional()

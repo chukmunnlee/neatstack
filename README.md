@@ -11,6 +11,7 @@ Access application here [https://neatapp-abcde.web.app](https://neatapp-abcde.we
 
 ### NEAT App Season 02 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402pChYdFRKUNFK0r6086gr2)
 
++ *Part 26* [Integrating Angular and NestJS with HTTP](https://www.youtube.com/watch?v=kF2jKlKLVwA)
 + *Part 25* [Validating Input and Standardising Error Response](https://www.youtube.com/watch?v=M8f5CrK9Pf8)
 + *Part 24* [Updating Boards](https://www.youtube.com/watch?v=WZj8brtP5P0)
 + *Part 23* [Deleting Boards](https://www.youtube.com/watch?v=EM0Nm-OqRlY)
