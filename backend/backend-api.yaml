@@ -9,6 +9,25 @@ servers:
   url: http://localhost:8080/api
 
 paths:
+   /healthz:
+      get:
+         description: Health check
+         operationId: healthCheck
+         responses:
+            '200':
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/GetHealthzResponse"
+
+            '500':
+               description: Error
+               content:
+                  application/json:
+                     schema:
+                        $ref: "#/components/schemas/KboardErrorResponse"
+
    /kboards/{userId}:
       get:
          description: Get a list of boards for a user
@@ -313,5 +332,13 @@ components:
                - type: array
                  items:
                     type: string
-
          required: [ "timestamp", "statusCode", "data", "message" ]
+
+      GetHealthzResponse:
+         type: object
+         properties:
+            timestamp:
+               type: integer
+            statusCode:
+               type: integer
+         required: [ "timestamp", "statusCode" ]

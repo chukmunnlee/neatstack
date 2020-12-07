@@ -5,6 +5,7 @@ import {PersistenceService} from './presistence.service';
 
 import { KboardsController } from './controllers/kboards.controller';
 import { KboardController } from './controllers/kboard.controller';
+import {HealthzController} from './controllers/healthz.controller';
 
 @Module({
   imports: [ ConfigModule.forRoot(),
@@ -15,7 +16,7 @@ import { KboardController } from './controllers/kboard.controller';
 		  })
 	  )
   ],
-  controllers: [KboardsController, KboardController],
+  controllers: [KboardsController, KboardController, HealthzController],
   providers: [ PersistenceService ],
 })
 export class AppModule {}

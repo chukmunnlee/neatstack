@@ -32,3 +32,5 @@ export interface KboardErrorResponse extends ResponseBase {
 	data: string | string[];
 	message: string
 }
+
+export interface GetHealthzResponse extends ResponseBase { }
