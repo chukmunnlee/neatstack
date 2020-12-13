@@ -1,0 +1,27 @@
+version: "3.9"
+
+networks:
+   mynet:
+
+volumes:
+   myvol:
+
+services:
+   neatdb:
+      image: chukmunnlee/neatdb:v1
+      ports:
+      - 3306
+      networks:
+      - mynet
+      volumes:
+      - myvol:/var/lib/mysql
+
+   neatapp:
+      image: chukmunnlee/neatstack:v2
+      ports:
+      - 3000:8080
+      networks:
+      - mynet
+      environment:
+      - DB_HOST=neatdb
+
