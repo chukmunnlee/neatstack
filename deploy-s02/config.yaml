@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Secret
+metadata:
+   name: neat-secret
+   labels:
+      name: neat-secret
+data:
+   MYSQL_ROOT_PASSWORD: aGVsbG8sd29ybGQ=
+   DB_PASSWORD: aGVsbG8sd29ybGQ=
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+   name: neat-cm
+   labels:
+      name: neat-cm
+data:
+   PORT: "8080"
+   DB_HOST: neatdb-sts-0.neatdb-svc.neatns.svc.cluster.local
+   DB_USER: root

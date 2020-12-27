@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+   name: neatdb-svc
+   labels:
+      name: neatdb-svc
+spec:
+   clusterIP: None
+   selector:
+      name: neatdb-pod
+   ports:
+   - name: neatdb-svc-port
+     port: 3306
+     targetPort: 3306
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: neatdb-sts
+   labels:
+      name: neatdb-sts
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         name: neatdb-pod
+   serviceName: neatdb-svc
+   volumeClaimTemplates:
+   - metadata:
+         name: neatdb-pvc
+         labels:
+            name: neatdb-pvc
+     spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: standard
+        resources:
+           requests:
+              storage: 1Gi
+   template:
+      metadata:
+         name: neatdb-pod
+         labels:
+            name: neatdb-pod
+      spec:
+         containers:
+         - name: neatdb-container
+           image: chukmunnlee/neatdb:v1
+           imagePullPolicy: IfNotPresent
+           envFrom:
+           - secretRef:
+               name: neat-secret
+           ports:
+           - name: neatdb-port
+             containerPort: 3306
+           volumeMounts:
+           - name: neatdb-pvc
+             mountPath: /var/lib/mysql
+           livenessProbe:
+              exec:
+                 command: [ "mysqladmin", "ping", "-uroot", "-p$MYSQL_ROOT_PASSWORD" ]
+              initialDelaySeconds: 15
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+   name: neatdb-netpol
+   labels:
+      name: neatdb-netpol
+spec:
+   policyTypes:
+   - Ingress
+   podSelector:
+      matchLabels:
+         name: neatdb-pod
+   ingress:
+   - from:
+     - podSelector:
+         matchLabels:
+            name: neatapp-po
+     ports:
+     - port: neatdb-port
+

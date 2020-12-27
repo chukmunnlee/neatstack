@@ -11,6 +11,7 @@ Access application here [https://neatapp-abcde.web.app](https://neatapp-abcde.we
 
 ### NEAT App Season 02 [Playlist](https://www.youtube.com/playlist?list=PLWhtC4Nz6402pChYdFRKUNFK0r6086gr2)
 
++ *Part 30* [Deploying to Kubernetes](https://www.youtube.com/watch?v=ZbM3ZABfvtU)
 + *Part 29* [Containerising the Application](https://www.youtube.com/watch?v=dYLir0uFByw)
 + *Part 28* [Adding Health Check to NestJS](https://www.youtube.com/watch?v=t9il47OqrY8)
 + *Part 27* [Deploying Angular in Standalone or Embed Mode](https://www.youtube.com/watch?v=0jRiRKf5fcg)
