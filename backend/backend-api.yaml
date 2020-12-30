@@ -6,10 +6,12 @@ info:
 
 servers:
 - description: Development Server
-  url: http://localhost:8080/api
+  url: http://localhost:8080
+- description: Reverse Proxy Server
+  url: http://localhost:5000
 
 paths:
-   /healthz:
+   /api/healthz:
       get:
          description: Health check
          operationId: healthCheck
@@ -28,7 +30,7 @@ paths:
                      schema:
                         $ref: "#/components/schemas/KboardErrorResponse"
 
-   /kboards/{userId}:
+   /api/kboards/{userId}:
       get:
          description: Get a list of boards for a user
          operationId: getKboardsByUserId
@@ -65,7 +67,7 @@ paths:
                      schema:
                         $ref: "#/components/schemas/KboardErrorResponse"
 
-   /kboard/{userId}:
+   /api/kboard/{userId}:
       post:
          description: Add an new Kboard for user
          operationId: insertKboard
@@ -95,7 +97,7 @@ paths:
                      schema:
                         $ref: "#/components/schemas/KboardErrorResponse"
 
-   /kboard/{userId}/{boardId}:
+   /api/kboard/{userId}/{boardId}:
       get:
          description: Get kboard with boardId for user 
          operationId: getKboardByUserIdAndBoardId
@@ -223,10 +225,10 @@ components:
                type: string
             createdOn:
                type: string
-               format: date-type
+               format: date-time
             updatedOn:
                type: string
-               format: date-type
+               format: date-time
             title:
                type: string
             createdBy: 

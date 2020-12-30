@@ -1,0 +1,23 @@
+:5000 {
+
+	@api {
+		path /api/*
+	}
+
+	reverse_proxy @api {
+		to localhost:8080
+	}
+
+	route @api {
+		openapi {
+			spec ../backend/backend-api.yaml
+			validate_servers false
+		}
+	}
+
+	handle_errors {
+		respond @api "URI: {http.request.orig_uri}. Error: {openapi.error}" {openapi.status_code} {
+			close
+		}
+	}
+}
