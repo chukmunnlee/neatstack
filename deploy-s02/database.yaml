@@ -79,7 +79,7 @@ spec:
    - from:
      - podSelector:
          matchLabels:
-            name: neatapp-po
+            name: neatapp-pod
      ports:
      - port: neatdb-port
 
